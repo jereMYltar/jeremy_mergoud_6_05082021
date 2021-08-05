@@ -1,0 +1,6 @@
+#dossiers de commande
+commande/
+
+#nodes_modules
+frontend/node_modules
+backend/node_modules

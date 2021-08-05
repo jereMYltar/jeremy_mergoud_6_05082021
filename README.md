@@ -26,6 +26,7 @@ You can also download it.
 # Installing the backend server :
 1. Open the folder named 'jeremy_mergoud_6_31072021'
 2. Open the 'backend' folder, and then execute 'npm install' in a NEW prompt
-3. In this prompt, start 'nodemon server'
-4. The application will reload automatically if you modify a source file
+3. In this prompt, execute : npm install -g nodemon
+4. Then execute : nodemon server
+5. The server will reload automatically if you modify a source file
 

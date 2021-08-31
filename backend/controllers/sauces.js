@@ -44,19 +44,6 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
-    // const sauce = new Sauce({
-    //     _id: req.params.id,
-    //     name: req.body.name,
-    //     manufacturer: req.body.manufacturer,
-    //     description: req.body.description,
-    //     mainPepper: req.body.mainPepper,
-    //     imageUrl: req.body.imageUrl,
-    //     heat: req.body.heat,
-    //     likes: req.body.likes,                      //changements à faire
-    //     dislikes: req.body.dislikes,                //changements à faire
-    //     usersLiked: [],                             //changements à faire
-    //     usersDisliked: []                           //changements à faire
-    // });
     const sauceObject = req.file ?
         {
             ...JSON.parse(req.body.sauce),

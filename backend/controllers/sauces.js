@@ -1,5 +1,6 @@
 const Sauce = require('../models/sauces');
 const fs = require('fs');
+const { POINT_CONVERSION_COMPRESSED } = require('constants');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
@@ -43,7 +44,7 @@ exports.getOneSauce = (req, res, next) => {
         );
 };
 
-exports.modifySauce = (req, res, next) => {
+exports.modifySauce = (req, res, next) => {  //reprendre la suppression de l'image
     const sauceObject = req.file ?
         {
             ...JSON.parse(req.body.sauce),
@@ -51,21 +52,39 @@ exports.modifySauce = (req, res, next) => {
         }
         :
         {...req.body}
-    Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
-        .then(
-            () => {
-                res.status(201).json({
-                    message : 'Sauce updated successfully;'
-                });
-            }
-        )
-        .catch(
-            (error) => {
-                res.status(400).json({
-                    error : error
-                });
-            }
-        );
+    
+    //mise à jour de la base de donnée lors d'une modification de sauce avec suppression de l'ancienne image
+
+    Sauce.findOne({_id: req.params.id})
+    .then(
+        (sauce) => {
+            const filename = sauce.imageUrl.split('/images/')[1];
+            fs.unlink(`./images/${filename}`, () => {
+                Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
+                .then(
+                    () => {
+                        res.status(201).json({
+                            message : 'Sauce updated successfully;'
+                        });
+                    }
+                )
+                .catch(
+                    (error) => {
+                        res.status(400).json({
+                            error : error
+                        });
+                    }
+                );
+            })
+        }
+    )
+    .catch(
+        (error) => {
+            res.status(500).json({
+                error : error
+            });
+        }
+    );   
 };
 
 exports.deleteSauce = (req, res, next) => {

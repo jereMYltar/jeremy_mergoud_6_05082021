@@ -4,3 +4,9 @@ commande/
 #nodes_modules
 frontend/node_modules
 backend/node_modules
+
+#env
+backend/.env
+
+#images
+backend/images

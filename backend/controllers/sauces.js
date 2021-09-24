@@ -203,8 +203,8 @@ exports.likeSauce = (req, res, next) => {
             Sauce.updateOne({_id: sauce._id}, sauce)
             .then(
                 () => {
-                    res.status(201).json({
-                        message : 'Sauce updated successfully;'
+                    res.status(200).json({
+                        message : 'Sauce like/dislike status updated successfully;'
                     });
                 }
             )

@@ -37,7 +37,7 @@ exports.getOneSauce = (req, res, next) => {
         )
         .catch(
             (error) => {
-                res.status(404).json({
+                res.status(410).json({
                     error : error
                 });
             }
@@ -45,46 +45,86 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {  //reprendre la suppression de l'image
-    const sauceObject = req.file ?
-        {
+//     const sauceObject = hasFile ?
+//         {
+//             ...JSON.parse(req.body.sauce),
+//             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+//         }
+//         :
+//         {...req.body}
+//     console.log(!!req.file);
+//     //mise à jour de la base de donnée lors d'une modification de sauce avec suppression de l'ancienne image
+
+//     Sauce.findOne({_id: req.params.id})
+//     .then(
+//         (sauce) => {
+//             const filename = sauce.imageUrl.split('/images/')[1];
+//             fs.unlink(`./images/${filename}`, () => {
+//                 Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
+//                 .then(
+//                     () => {
+//                         res.status(201).json({
+//                             message : 'Sauce updated successfully;'
+//                         });
+//                     }
+//                 )
+//                 .catch(
+//                     (error) => {
+//                         res.status(400).json({
+//                             error : error
+//                         });
+//                     }
+//                 );
+//             })
+//         }
+//     )
+//     .catch(
+//         (error) => {
+//             res.status(500).json({
+//                 error : error
+//             });
+//         }
+//     );   
+// };
+    const hasFile = !!req.file;
+    let sauceObject;
+    if (hasFile) {
+        sauceObject = {
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        }
-        :
-        {...req.body}
-    
-    //mise à jour de la base de donnée lors d'une modification de sauce avec suppression de l'ancienne image
-
-    Sauce.findOne({_id: req.params.id})
-    .then(
-        (sauce) => {
-            const filename = sauce.imageUrl.split('/images/')[1];
-            fs.unlink(`./images/${filename}`, () => {
-                Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
-                .then(
-                    () => {
-                        res.status(201).json({
-                            message : 'Sauce updated successfully;'
-                        });
-                    }
-                )
-                .catch(
-                    (error) => {
-                        res.status(400).json({
-                            error : error
-                        });
-                    }
-                );
-            })
-        }
-    )
-    .catch(
-        (error) => {
-            res.status(500).json({
-                error : error
-            });
-        }
-    );   
+        };
+        Sauce.findOne({_id: req.params.id})
+        .then(
+            (sauce) => {
+                const filename = sauce.imageUrl.split('/images/')[1];
+                fs.unlink(`./images/${filename}`, () => {
+                    
+                })
+            }    
+        )
+        .catch(
+            (error) => {
+                res.status(410).json({ error : error });
+            }
+        );
+    } else {
+        sauceObject = {...req.body}
+    };
+    Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
+        .then(
+            () => {
+                res.status(201).json({
+                    message : 'Sauce updated successfully;'
+                });
+            }
+        )
+        .catch(
+            (error) => {
+                res.status(400).json({
+                    error : error
+                });
+            }
+        );
 };
 
 exports.deleteSauce = (req, res, next) => {
@@ -111,7 +151,7 @@ exports.deleteSauce = (req, res, next) => {
     )
     .catch(
         (error) => {
-            res.status(500).json({
+            res.status(410).json({
                 error : error
             });
         }
@@ -132,4 +172,56 @@ exports.getAllSauces = (req, res, next) => {
             });
         }
     );  
+};
+
+exports.likeSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+    .then(
+        (sauce) => {
+            let userId = req.body.userId;
+            let userHasAlreadyLiked = !!(sauce.usersLiked.includes(userId));
+            let userHasAlreadyDisLiked = !!(sauce.usersDisliked.includes(userId));
+            let userHasAlreadyReacted = userHasAlreadyLiked || userHasAlreadyDisLiked;
+            let userWantsToLike = !!(req.body.like == 1);
+            let userWantsToCancel = !!(req.body.like == 0);
+            let userWantsToDislike = !!(req.body.like == -1);
+            
+            if (userWantsToLike && !userHasAlreadyReacted) {
+                sauce.usersLiked.push(userId);
+            } else if (userWantsToCancel && userHasAlreadyLiked) {
+                let index = sauce.usersLiked.indexOf(userId);
+                sauce.usersLiked.splice(index, 1);
+            } else if (userWantsToCancel && userHasAlreadyDisLiked) {
+                let index = sauce.usersDisliked.indexOf(userId);
+                sauce.usersDisliked.splice(index, 1);
+            } else if (userWantsToDislike && !userHasAlreadyReacted) {
+                sauce.usersDisliked.push(userId);
+            }
+            sauce.likes = sauce.usersLiked.length;
+            sauce.dislikes = sauce.usersDisliked.length;
+
+            Sauce.updateOne({_id: sauce._id}, sauce)
+            .then(
+                () => {
+                    res.status(201).json({
+                        message : 'Sauce updated successfully;'
+                    });
+                }
+            )
+            .catch(
+                (error) => {
+                    res.status(400).json({
+                        error : error
+                    });
+                }
+            );
+        }
+    )
+    .catch(
+        (error) => {
+            res.status(410).json({
+                error : error
+            });
+        }
+    );
 };

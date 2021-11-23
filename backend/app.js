@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config();
@@ -18,16 +17,12 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${
 
 const app = express();
 
+app.use(express.json());
+
 //helmet
 app.use(helmet());
 
-//rate-limiter
-const rateLimit = require("express-rate-limit");
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-});
-app.use(limiter);
+
 
 //CORS implementation
 app.use((req, res, next) => {
@@ -37,7 +32,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());
+//rate-limiter
+const rateLimit = require("express-rate-limit");
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many request. Try again after 15 minutes'
+});
+app.use(limiter);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 

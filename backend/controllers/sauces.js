@@ -46,48 +46,7 @@ exports.getOneSauce = (req, res, next) => {
         );
 };
 
-exports.modifySauce = (req, res, next) => {  //reprendre la suppression de l'image
-//     const sauceObject = hasFile ?
-//         {
-//             ...JSON.parse(req.body.sauce),
-//             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-//         }
-//         :
-//         {...req.body}
-//     console.log(!!req.file);
-//     //mise à jour de la base de donnée lors d'une modification de sauce avec suppression de l'ancienne image
-
-//     Sauce.findOne({_id: req.params.id})
-//     .then(
-//         (sauce) => {
-//             const filename = sauce.imageUrl.split('/images/')[1];
-//             fs.unlink(`./images/${filename}`, () => {
-//                 Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id})
-//                 .then(
-//                     () => {
-//                         res.status(201).json({
-//                             message : 'Sauce updated successfully;'
-//                         });
-//                     }
-//                 )
-//                 .catch(
-//                     (error) => {
-//                         res.status(400).json({
-//                             error : error
-//                         });
-//                     }
-//                 );
-//             })
-//         }
-//     )
-//     .catch(
-//         (error) => {
-//             res.status(500).json({
-//                 error : error
-//             });
-//         }
-//     );   
-// };
+exports.modifySauce = (req, res, next) => {
     const hasFile = !!req.file;
     let sauceObject;
     if (hasFile) {

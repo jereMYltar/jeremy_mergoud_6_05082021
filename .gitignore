@@ -7,6 +7,8 @@ backend/node_modules
 
 #env
 backend/.env
+backend/.env copy
+backend/.env original
 
 #images
 backend/images

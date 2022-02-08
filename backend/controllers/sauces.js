@@ -1,10 +1,10 @@
 const Sauce = require('../models/sauces');
 const fs = require('fs');
 const { POINT_CONVERSION_COMPRESSED } = require('constants');
+const { log } = require('console');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
-    delete sauceObject._id;
     const sauce = new Sauce({
         ...sauceObject,
         likes: 0,
@@ -47,6 +47,10 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
+    //est-ce encore utile considérant les évolutions apportées au middleware auth ?
+    // if (!req.body.userId) {
+    //     res.status(403).json({ error : 'unauthorized request.' });
+    // };
     const hasFile = !!req.file;
     let sauceObject;
     if (hasFile) {

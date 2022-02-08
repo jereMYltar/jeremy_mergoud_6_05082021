@@ -30,3 +30,8 @@ You can also download it.
 4. Then execute : nodemon server
 5. The server will reload automatically if you modify a source file
 
+# Create a .env file in the 'backend' folder
+1. Respect the model file .env.model
+2. In DB_PASS and DB_USER, fill in the password and the name of a valid user for your Mongo DB database
+3. In DB_COLLECTION, fill in the name of your collection in your Mongo DB database
+4. In JWT_SALT, fill in a salting key 

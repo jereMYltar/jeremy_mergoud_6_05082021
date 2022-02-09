@@ -11,7 +11,7 @@ backend/.env copy
 backend/.env original
 
 #images
-backend/images
+backend/images/
 
 #autres
 P6_JeremyMERGOUD_Présentation.pptx

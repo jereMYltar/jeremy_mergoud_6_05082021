@@ -26,12 +26,13 @@ module.exports = (req, res, next) => {
         const userId = decodedToken.userId;
         User.findOne({_id: userId})
             .then((user) => {
+                res.locals.userId = userId;
                 next();
             })
     //le .catch est-il utile ici ? Si je ne le mets pas, j'ai l'impression que le try n'abouti pas et que le second catch prend le relais
-            .catch((error) => {
-                throw(error)
-            });
+            // .catch((error) => {
+            //     throw(error)
+            // });
     } catch {
         res.status(403).json({ error : 'unauthorized request.' })
     }

@@ -7,8 +7,8 @@ schema
     .is().max(16)
     .has().uppercase()
     .has().lowercase()
-    .has().digits(4)
+    .has().digits(3)
     .has().not().spaces()
-    .has().symbols(2);
+    .has().symbols(1);
 
 module.exports = schema;

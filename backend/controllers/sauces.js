@@ -47,10 +47,6 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
-    //est-ce encore utile considérant les évolutions apportées au middleware auth ?
-    // if (!req.body.userId) {
-    //     res.status(403).json({ error : 'unauthorized request.' });
-    // };
     const hasFile = !!req.file;
     let sauceObject;
     if (hasFile) {

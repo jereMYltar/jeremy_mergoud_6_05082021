@@ -1,7 +1,6 @@
 const Sauce = require('../models/sauces');
 const fs = require('fs');
 const { POINT_CONVERSION_COMPRESSED } = require('constants');
-const { log } = require('console');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
@@ -39,7 +38,7 @@ exports.getOneSauce = (req, res, next) => {
         )
         .catch(
             (error) => {
-                res.status(410).json({
+                res.status(412).json({
                     error : error
                 });
             }

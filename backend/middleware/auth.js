@@ -14,11 +14,11 @@ module.exports = (req, res, next) => {
             })
             .catch((error) => {
                 throw(error)
-                //res.status(404).json({ error : 'user not found.' })
+                // res.status(404).json({ error : 'user not found.' })
             });
     } catch {
         throw new Error();
-        //res.status(498).json({ error : 'unauthorized request.' })
+        // res.status(498).json({ error : 'unauthorized request.' })
     }
 };
 

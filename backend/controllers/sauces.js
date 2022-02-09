@@ -1,5 +1,6 @@
 const Sauce = require('../models/sauces');
 const fs = require('fs');
+const mongooseError = require('mongoose-error');
 const { POINT_CONVERSION_COMPRESSED } = require('constants');
 
 exports.createSauce = (req, res, next) => {
@@ -20,9 +21,8 @@ exports.createSauce = (req, res, next) => {
         )
         .catch(
             (error) => {
-                res.status(400).json({
-                    error : error
-                });
+                throw mongooseError(error);
+                // res.status(400).json({ error : error });
             }
         );
 };
@@ -38,9 +38,8 @@ exports.getOneSauce = (req, res, next) => {
         )
         .catch(
             (error) => {
-                res.status(412).json({
-                    error : error
-                });
+                throw mongooseError(error);
+                // res.status(412).json({ error : error });
             }
         );
 };
@@ -64,7 +63,8 @@ exports.modifySauce = (req, res, next) => {
         )
         .catch(
             (error) => {
-                res.status(410).json({ error : error });
+                throw mongooseError(error);
+                // res.status(410).json({ error : error });
             }
         );
     } else {
@@ -80,9 +80,8 @@ exports.modifySauce = (req, res, next) => {
         )
         .catch(
             (error) => {
-                res.status(400).json({
-                    error : error
-                });
+                throw mongooseError(error);
+                // res.status(400).json({ error : error });
             }
         );
 };
@@ -101,9 +100,8 @@ exports.deleteSauce = (req, res, next) => {
                     )
                     .catch(
                         (error) => {
-                            res.status(400).json({
-                                error : error
-                            })
+                            throw mongooseError(error);
+                            // res.status(400).json({ error : error })
                         }
                     );
             })
@@ -111,9 +109,8 @@ exports.deleteSauce = (req, res, next) => {
     )
     .catch(
         (error) => {
-            res.status(410).json({
-                error : error
-            });
+            throw mongooseError(error);
+            // res.status(410).json({ error : error });
         }
     );   
 };
@@ -127,9 +124,8 @@ exports.getAllSauces = (req, res, next) => {
     )
     .catch(
         (error) => {
-            res.status(400).json({
-                error : error
-            });
+            throw mongooseError(error);
+            // res.status(400).json({ error : error });
         }
     );  
 };
@@ -170,18 +166,16 @@ exports.likeSauce = (req, res, next) => {
             )
             .catch(
                 (error) => {
-                    res.status(400).json({
-                        error : error
-                    });
+                    throw mongooseError(error);
+                    // res.status(400).json({ error : error });
                 }
             );
         }
     )
     .catch(
         (error) => {
-            res.status(410).json({
-                error : error
-            });
+            throw mongooseError(error);
+            // res.status(410).json({ error : error });
         }
     );
 };

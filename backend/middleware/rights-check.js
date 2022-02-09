@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Sauce = require('../models/sauces');
+const mongooseError = require('mongoose-error');
 require('dotenv').config()
 
 module.exports = (req, res, next) => {
@@ -12,7 +13,8 @@ module.exports = (req, res, next) => {
             }
         })
         .catch((error) => {
-            res.status(410).json({ error : error });
+            throw mongooseError(error);
+            //res.status(410).json({ error : error });
         })
 };
 

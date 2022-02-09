@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
+const mongooseError = require('mongoose-error');
 require('dotenv').config()
 
 module.exports = (req, res, next) => {
@@ -13,7 +14,7 @@ module.exports = (req, res, next) => {
                 next();
             })
             .catch((error) => {
-                throw(error)
+                throw mongooseError(error)
                 // res.status(404).json({ error : 'user not found.' })
             });
     } catch {
